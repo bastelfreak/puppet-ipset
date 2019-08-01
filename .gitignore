@@ -11,7 +11,6 @@
 /bin/
 /doc/
 /Gemfile.local
-/Gemfile.lock
 /junit/
 /log/
 /pkg/
@@ -22,3 +21,5 @@
 /convert_report.txt
 /update_report.txt
 .DS_Store
+Gemfile.lock
+.vendor/
