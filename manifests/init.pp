@@ -114,7 +114,7 @@ define ipset (
       }
     }
 
-    # add switch to script, if we 
+    # add switch to script, if we
     if $ignore_contents {
       $ignore_contents_opt = ' -n'
     } else {

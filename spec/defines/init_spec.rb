@@ -85,6 +85,16 @@ describe 'ipset' do
     context "set type #{test_name}" do
       let(:title) { 'simple' }
       let(:params) { { set: set } }
+      let :facts do
+        {
+          os: {
+            family: 'RedHat',
+            release: {
+              major: 6
+            }
+          }
+        }
+      end
 
       check_file_set_header(
         'simple',
@@ -115,7 +125,16 @@ describe 'ipset' do
         ignore_contents: true
       }
     end
-
+    let :facts do
+      {
+        os: {
+          family: 'RedHat',
+          release: {
+            major: 6
+          }
+        }
+      }
+    end
     check_file_set_header(
       'custom',
       # rubocop:disable Metrics/LineLength
@@ -140,6 +159,17 @@ describe 'ipset' do
       {
         ensure: 'absent',
         set: ['10.0.0.0/8', '192.168.0.0/16']
+      }
+    end
+
+    let :facts do
+      {
+        os: {
+          family: 'RedHat',
+          release: {
+            major: 6
+          }
+        }
       }
     end
 

@@ -108,7 +108,16 @@ describe 'ipset::install' do
           }
         CONDITION
       end
-
+      let :facts do
+        {
+          os: {
+            family: 'RedHat',
+            release: {
+              major: 7
+            }
+          }
+        }
+      end
       check_base
       check_ipsets
       check_rhel7_systemd_unit(firewall_service)
