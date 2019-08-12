@@ -5,12 +5,12 @@
 class ipset::install {
   include ipset::params
 
-  $cfg       = $::ipset::params::config_path
-  $cfg_purge = $::ipset::params::config_purge
+  $cfg       = $ipset::params::config_path
+  $cfg_purge = $ipset::params::config_purge
 
   # main package
-  package { $::ipset::params::package:
-    ensure => $::ipset::params::package_ensure,
+  package { $ipset::params::package:
+    ensure => $ipset::params::package_ensure,
     alias  => 'ipset',
   }
 
@@ -41,7 +41,7 @@ class ipset::install {
       # make sure libmnl is installed
       package { 'libmnl':
         ensure => installed,
-        before => Package[$::ipset::params::package],
+        before => Package[$ipset::params::package],
       }
 
       # do not use original RC start script from the ipset package
@@ -53,7 +53,7 @@ class ipset::install {
       exec { 'ipset_disable_distro':
         command => "/bin/bash -c '/etc/init.d/ipset stop && /sbin/chkconfig ipset off'",
         unless  => "/bin/bash -c '/sbin/chkconfig | /bin/grep ipset | /bin/grep -qv :on'",
-        require => Package[$::ipset::params::package],
+        require => Package[$ipset::params::package],
       }
       # upstart starter
       -> file { '/etc/init/ipset.conf':
@@ -72,7 +72,7 @@ class ipset::install {
       # dependency is covered by running ipset before RC scripts suite, where firewall service is
     } elsif $facts['os']['release']['major'] == '7' {
       # for management of dependencies
-      $firewall_service = $::ipset::params::firewall_service
+      $firewall_service = $ipset::params::firewall_service
 
       # systemd service definition, there is no script in COS7
       file { '/usr/lib/systemd/system/ipset.service':
