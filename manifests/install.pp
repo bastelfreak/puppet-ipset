@@ -38,12 +38,6 @@ class ipset::install {
   # autostart
   if $facts['os']['family'] == 'RedHat' {
     if $facts['os']['release']['major'] == '6' {
-      # make sure libmnl is installed
-      package { 'libmnl':
-        ensure => installed,
-        before => Package[$ipset::params::package],
-      }
-
       # do not use original RC start script from the ipset package
       # it is hard to define dependencies there
       # also, it can collide with what we define through puppet

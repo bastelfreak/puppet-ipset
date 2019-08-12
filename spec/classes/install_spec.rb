@@ -51,10 +51,6 @@ describe 'ipset::install' do
     check_rhel6_upstart_conf
 
     it do
-      is_expected.to contain_package('libmnl').only_with(
-        ensure: 'installed',
-        before: 'Package[ipset]'
-      )
       is_expected.to contain_exec('ipset_disable_distro').with(
         # rubocop:disable Metrics/LineLength
         command: "/bin/bash -c '/etc/init.d/ipset stop && /sbin/chkconfig ipset off'",
