@@ -7,7 +7,7 @@ class ipset::install {
 
   $cfg       = $::ipset::params::config_path
   $cfg_purge = $::ipset::params::config_purge
-  
+
   # main package
   package { $::ipset::params::package:
     ensure => $::ipset::params::package_ensure,

@@ -23,7 +23,7 @@ class ipset::params (
   } else {
     $config_purge = true
   }
-      
+
   if $use_firewall_service {
     # use specified override
     $firewall_service = $use_firewall_service
