@@ -14,6 +14,9 @@ def check_file_set_header(name, attributes)
     is_expected.to contain_file("/etc/sysconfig/ipset.d/#{name}.hdr")
       .only_with({
         ensure: 'file',
+        owner: 'root',
+        group: 'root',
+        mode: '0640',
         notify: "Exec[sync_ipset_#{name}]"
       }.merge(attributes))
   end
