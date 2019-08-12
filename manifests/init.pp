@@ -85,7 +85,7 @@ define ipset (
           ensure => file,
           owner  => 'root',
           group  => 'root',
-           mode  => '0640',
+          mode   => '0640',
           source => $set,
         }
       }
