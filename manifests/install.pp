@@ -68,16 +68,17 @@ class ipset::install {
       # for management of dependencies
       $firewall_service = $ipset::params::firewall_service
 
-      # systemd service definition, there is no script in COS7
-      file { '/usr/lib/systemd/system/ipset.service':
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => template("${module_name}/init.systemd.erb"),
+      $manage_unitfile = true
+      if $facts['service_prodivder'] == 'systemd' and $manage_unitfile {
+        systemd::unit_file { 'foo.service':
+          content => template("${module_name}/init.systemd.erb"),
+          enable  => true,
+          active  => true,
+          require => File['/usr/local/sbin/ipset_init'],
+          notify  => Service['ipset'],
+        }
       }
-      # systemd service autostart
-      ~> service { 'ipset':
+      service { 'ipset':
         ensure  => 'running',
         enable  => true,
         require => File['/usr/local/sbin/ipset_init'],
