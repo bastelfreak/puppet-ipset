@@ -28,6 +28,8 @@ def changelog_future_release
   returnVal
 end
 
+PuppetLint.configuration.log_format = '%{path}:%{line}:%{check}:%{KIND}:%{message}'
+PuppetLint.configuration.absolute_classname_reverse = true
 PuppetLint.configuration.send('disable_relative')
 
 if Bundler.rubygems.find_name('github_changelog_generator').any?
