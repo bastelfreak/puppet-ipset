@@ -71,7 +71,7 @@ class ipset::install {
       $manage_unitfile = true
       if $facts['service_prodivder'] == 'systemd' and $manage_unitfile {
         systemd::unit_file { 'foo.service':
-          content => template("${module_name}/init.systemd.erb"),
+          content => epp("${module_name}/init.systemd.epp", {'cfg' => $cfg, 'firewall_service' => $firewall_service}),
           enable  => true,
           active  => true,
           require => File['/usr/local/sbin/ipset_init'],
