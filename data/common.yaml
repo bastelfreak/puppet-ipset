@@ -1,0 +1,6 @@
+---
+ipset::package: ipset
+ipset::service: ipset
+ipset::package_ensure: present
+ipset::service_ensure: running
+ipset::enable: true
