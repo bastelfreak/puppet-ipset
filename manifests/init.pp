@@ -123,14 +123,11 @@ define ipset (
 
     # sync if needed by helper script
     exec { "sync_ipset_${title}":
-      path    => [ '/sbin', '/usr/sbin', '/bin', '/usr/bin' ],
-
+      path    => [ '/sbin', '/usr/sbin', '/bin', '/usr/bin', '/usr/local/bin', '/usr/local/sbin' ],
       # use helper script to do the sync
-      command => "/usr/local/sbin/ipset_sync -c '${ipset::params::config_path}'    -i ${title}${ignore_contents_opt}",
-
+      command => "ipset_sync -c '${ipset::params::config_path}'    -i ${title}${ignore_contents_opt}",
       # only when difference with in-kernel set is detected
-      unless  => "/usr/local/sbin/ipset_sync -c '${ipset::params::config_path}' -d -i ${title}${ignore_contents_opt}",
-
+      unless  => "ipset_sync -c '${ipset::params::config_path}' -d -i ${title}${ignore_contents_opt}",
       require => Package['ipset'],
     }
 
@@ -148,10 +145,8 @@ define ipset (
     # clear ipset from kernel
     exec { "ipset destroy ${title}":
       path    => [ '/sbin', '/usr/sbin', '/bin', '/usr/bin' ],
-
-      command => "/usr/sbin/ipset destroy ${title}",
-      onlyif  => "/usr/sbin/ipset list -name ${title} &>/dev/null",
-
+      command => "ipset destroy ${title}",
+      onlyif  => "ipset list -name ${title} &>/dev/null",
       require => Package['ipset'],
     }
   } else {
