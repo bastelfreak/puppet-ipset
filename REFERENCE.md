@@ -5,14 +5,7 @@
 
 **Classes**
 
-_Public Classes_
-
 * [`ipset`](#ipset): module to install the ipset tooling and to manage individual ipsets
-* [`ipset::params`](#ipsetparams): Module parameters.
-
-_Private Classes_
-
-* `ipset::install`: Configure system to handle IP sets.
 
 **Defined types**
 
@@ -38,7 +31,9 @@ module to install the ipset tooling and to manage individual ipsets
 
 The following parameters are available in the `ipset` class.
 
-##### `package`
+##### `packages`
+
+Data type: `Array[String[1]]`
 
 The name of the package we want to install
 
@@ -60,12 +55,6 @@ Data type: `Boolean`
 
 Boolean to decide if we want to have the service in autostart or not
 
-##### `packages`
-
-Data type: `Array[String[1]]`
-
-
-
 ##### `package_ensure`
 
 Data type: `Enum['present', 'absent', 'latest']`
@@ -77,39 +66,6 @@ Data type: `Enum['present', 'absent', 'latest']`
 Data type: `Stdlib::Absolutepath`
 
 
-
-### ipset::params
-
-Module parameters.
-
-#### Parameters
-
-The following parameters are available in the `ipset::params` class.
-
-##### `use_firewall_service`
-
-Data type: `Optional[Enum['iptables', 'firewalld']]`
-
-Define the firewall service used by the server.
-Defaults to the Linux distribution default.
-
-Default value: `undef`
-
-##### `package_ensure`
-
-Data type: `Enum['latest','present']`
-
-
-
-Default value: 'latest'
-
-##### `config_purge_set`
-
-Data type: `Optional[Enum['true', 'false']]`
-
-
-
-Default value: `undef`
 
 ## Defined types
 

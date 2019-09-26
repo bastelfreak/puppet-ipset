@@ -40,9 +40,10 @@ define ipset::set (
   # keep definition file and in-kernel runtime state in sync
   Boolean $keep_in_sync = true,
 ) {
-  include ipset::params
+  $config_path = $ipset::config_path
+  #include ipset::params
 
-  contain ipset::install
+  #contain ipset::install
 
   $default_options = {
     'family'   => 'inet',
@@ -58,7 +59,7 @@ define ipset::set (
     $opt_string = inline_template('<%= (@actual_options.sort.map { |k,v| k.to_s + " " + v.to_s }).join(" ") %>')
 
     # header
-    file { "${ipset::params::config_path}/${title}.hdr":
+    file { "${config_path}/${title}.hdr":
       ensure  => file,
       owner   => 'root',
       group   => 'root',
@@ -71,7 +72,7 @@ define ipset::set (
     case $set {
       IPSet::Set::Array: {
         # create file with ipset, one record per line
-        file { "${ipset::params::config_path}/${title}.set":
+        file { "${config_path}/${title}.set":
           ensure  => file,
           owner   => 'root',
           group   => 'root',
@@ -81,7 +82,7 @@ define ipset::set (
       }
       IPSet::Set::Puppet_URL: {
         # passed as puppet file
-        file { "${ipset::params::config_path}/${title}.set":
+        file { "${config_path}/${title}.set":
           ensure => file,
           owner  => 'root',
           group  => 'root',
@@ -91,7 +92,7 @@ define ipset::set (
       }
       IPSet::Set::File_URL: {
         # passed as target node file
-        file { "${ipset::params::config_path}/${title}.set":
+        file { "${config_path}/${title}.set":
           ensure => file,
           owner  => 'root',
           group  => 'root',
@@ -101,7 +102,7 @@ define ipset::set (
       }
       String: {
         # passed directly as content string (from template for example)
-        file { "${ipset::params::config_path}/${title}.set":
+        file { "${config_path}/${title}.set":
           ensure  => file,
           owner   => 'root',
           group   => 'root',
@@ -125,20 +126,20 @@ define ipset::set (
     exec { "sync_ipset_${title}":
       path    => [ '/sbin', '/usr/sbin', '/bin', '/usr/bin', '/usr/local/bin', '/usr/local/sbin' ],
       # use helper script to do the sync
-      command => "ipset_sync -c '${ipset::params::config_path}'    -i ${title}${ignore_contents_opt}",
+      command => "ipset_sync -c '${config_path}'    -i ${title}${ignore_contents_opt}",
       # only when difference with in-kernel set is detected
-      unless  => "ipset_sync -c '${ipset::params::config_path}' -d -i ${title}${ignore_contents_opt}",
+      unless  => "ipset_sync -c '${config_path}' -d -i ${title}${ignore_contents_opt}",
       require => Package['ipset'],
     }
 
     if $keep_in_sync {
-      File["${ipset::params::config_path}/${title}.set"] ~> Exec["sync_ipset_${title}"]
+      File["${config_path}/${title}.set"] ~> Exec["sync_ipset_${title}"]
     }
   } elsif $ensure == 'absent' {
     # ensuring absence
 
     # do not contain config files
-    file { ["${ipset::params::config_path}/${title}.set", "${ipset::params::config_path}/${title}.hdr"]:
+    file { ["${config_path}/${title}.set", "${config_path}/${title}.hdr"]:
       ensure  => absent,
     }
 
