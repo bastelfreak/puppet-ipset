@@ -33,7 +33,7 @@ def check_exec_sync(name, attributes)
   it do
     is_expected.to contain_exec("sync_ipset_#{name}")
       .with({
-        path: ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
+        path: ['/sbin', '/usr/sbin', '/bin', '/usr/bin', '/usr/local/bin', '/usr/local/sbin'],
         require: 'Package[ipset]'
       }.merge(attributes))
       .that_subscribes_to("File[/etc/sysconfig/ipset.d/#{name}.set]")
@@ -83,9 +83,12 @@ simple_test_cases = [
   ]
 ]
 
-describe 'ipset' do
+describe 'ipset::set' do
   simple_test_cases.each do |test_name, set, set_file_attributes|
     context "set type #{test_name}" do
+      let :pre_condition do
+        'include ipset'
+      end
       let(:title) { 'simple' }
       let(:params) { { set: set } }
       let :facts do
@@ -109,16 +112,19 @@ describe 'ipset' do
       check_exec_sync(
         'simple',
         # rubocop:disable Metrics/LineLength
-        command: "/usr/local/sbin/ipset_sync -c '/etc/sysconfig/ipset.d'    -i simple",
-        unless: "/usr/local/sbin/ipset_sync -c '/etc/sysconfig/ipset.d' -d -i simple",
+        command: "ipset_sync -c '/etc/sysconfig/ipset.d'    -i simple",
+        unless: "ipset_sync -c '/etc/sysconfig/ipset.d' -d -i simple",
         # rubocop:enable Metrics/LineLength
       )
     end
   end
 end
 
-describe 'ipset' do
+describe 'ipset::set' do
   context 'custom parameters' do
+    let :pre_condition do
+      'include ipset'
+    end
     let(:title) { 'custom' }
     let :params do
       {
@@ -148,15 +154,19 @@ describe 'ipset' do
     check_exec_sync(
       'custom',
       # rubocop:disable Metrics/LineLength
-      command: "/usr/local/sbin/ipset_sync -c '/etc/sysconfig/ipset.d'    -i custom -n",
-      unless: "/usr/local/sbin/ipset_sync -c '/etc/sysconfig/ipset.d' -d -i custom -n",
+      command: "ipset_sync -c '/etc/sysconfig/ipset.d'    -i custom -n",
+      unless: "ipset_sync -c '/etc/sysconfig/ipset.d' -d -i custom -n",
       # rubocop:enable Metrics/LineLength
     )
   end
 end
 
-describe 'ipset' do
+describe 'ipset::set' do
   context 'absent' do
+    let :pre_condition do
+      'include ipset'
+    end
+
     let(:title) { 'absent' }
     let :params do
       {
@@ -184,8 +194,8 @@ describe 'ipset' do
       is_expected.to contain_exec('ipset destroy absent')
         .with(
           path: ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-          command: '/usr/sbin/ipset destroy absent',
-          onlyif: '/usr/sbin/ipset list -name absent &>/dev/null',
+          command: 'ipset destroy absent',
+          onlyif: 'ipset list -name absent &>/dev/null',
           require: 'Package[ipset]'
         )
     end
