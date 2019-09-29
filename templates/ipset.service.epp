@@ -1,0 +1,25 @@
+<%- | Optional[String[1]] $firewall_service,
+  String[1] $cfg,
+  Optional[String[1]] $service_dependency,
+| -%>
+# THIS FILE IS MANAGED BY PUPPET
+[Unit]
+Description=define and fill-in ipsets
+Documentation=https://github.com/voxpupuli/puppet-ipset
+<% if $firewall_service { -%>
+Before=<%= $firewall_service %>
+<% } -%>
+<% if $firewall_service { -%>
+Require=<%= $service_dependency %>
+<% } -%>
+After=network-online.target
+Wants=network-online.target
+
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/ipset_init -c "<%= $cfg %>"
+
+[Install]
+WantedBy=basic.target

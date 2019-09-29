@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##
+# THIS FILE IS MANAGED BY PUPPET
+##
+
 ### config
 
 default_cfg='/etc/sysconfig/ipset.d'

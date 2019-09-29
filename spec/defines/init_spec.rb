@@ -96,9 +96,10 @@ describe 'ipset::set' do
           os: {
             family: 'RedHat',
             release: {
-              major: 6
+              major: 7
             }
-          }
+          },
+          systemd: true
         }
       end
 
@@ -139,9 +140,10 @@ describe 'ipset::set' do
         os: {
           family: 'RedHat',
           release: {
-            major: 6
+            major: 7
           }
-        }
+        },
+        systemd: true
       }
     end
     check_file_set_header(
@@ -180,9 +182,10 @@ describe 'ipset::set' do
         os: {
           family: 'RedHat',
           release: {
-            major: 6
+            major: 7
           }
-        }
+        },
+        systemd: true
       }
     end
 

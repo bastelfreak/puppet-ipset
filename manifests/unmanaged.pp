@@ -23,7 +23,7 @@ define ipset::unmanaged(
   IPSet::Options $options = {},
   Boolean $keep_in_sync = true,
 ) {
-  ipset { $title:
+  ipset::set { $title:
     ensure          => $ensure,
     set             => '',
     ignore_contents => true,

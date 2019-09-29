@@ -147,7 +147,7 @@ define ipset::set (
     exec { "ipset destroy ${title}":
       path    => [ '/sbin', '/usr/sbin', '/bin', '/usr/bin' ],
       command => "ipset destroy ${title}",
-      onlyif  => "ipset list -name ${title} &>/dev/null",
+      onlyif  => "ipset list ${title}",
       require => Package['ipset'],
     }
   } else {
